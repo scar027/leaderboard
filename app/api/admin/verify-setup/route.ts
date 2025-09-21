@@ -25,7 +25,7 @@ export async function POST(request: NextRequest) {
     }
 
     console.log("[v0] Setup key verified, checking existing admins")
-    const supabase = createClient()
+    const supabase = await createClient()
     const { data: existingAdmins, error } = await supabase.from("admin_users").select("id").limit(1)
 
     if (error) {
