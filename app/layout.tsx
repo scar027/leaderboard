@@ -8,7 +8,6 @@ import "./globals.css"
 
 export const metadata: Metadata = {
   title: "Leaderboard",
-  description: "Simple leaderboard website with admin panel",
   generator: "v0.app",
 }
 
