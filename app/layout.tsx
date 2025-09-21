@@ -9,6 +9,14 @@ import "./globals.css"
 export const metadata: Metadata = {
   title: "Leaderboard",
   generator: "v0.app",
+  icons: {
+    icon: [
+      { url: "/favicon.png", sizes: "32x32", type: "image/png" },
+      { url: "/favicon.svg", type: "image/svg+xml" },
+    ],
+    shortcut: "/favicon.png",
+    apple: "/favicon.png",
+  },
 }
 
 export default function RootLayout({
