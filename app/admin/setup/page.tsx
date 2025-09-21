@@ -39,14 +39,24 @@ export default function AdminSetupPage() {
     try {
       const supabase = createClient()
 
+      console.log("[v0] Attempting to create admin user:", username)
+
       // Call the create_admin_user function
       const { data, error: rpcError } = await supabase.rpc("create_admin_user", {
         admin_username: username,
         admin_password: password,
       })
 
+      console.log("[v0] RPC response:", { data, error: rpcError })
+
       if (rpcError) {
+        console.error("[v0] RPC Error details:", rpcError)
         throw rpcError
+      }
+
+      // Check if the response indicates an error
+      if (data && typeof data === "string" && data.startsWith("Error:")) {
+        throw new Error(data)
       }
 
       setMessage(`Admin user "${username}" created successfully! You can now log in at /admin`)
@@ -54,9 +64,11 @@ export default function AdminSetupPage() {
       setPassword("")
       setConfirmPassword("")
     } catch (err: any) {
-      console.error("Error creating admin:", err)
-      if (err.message.includes("already exists")) {
+      console.error("[v0] Error creating admin:", err)
+      if (err.message.includes("already exists") || err.message.includes("Username already exists")) {
         setError("Username already exists. Please choose a different username.")
+      } else if (err.message.includes("function") && err.message.includes("does not exist")) {
+        setError("Database function not found. Please run the setup script: scripts/005_fix_admin_function.sql")
       } else {
         setError(`Failed to create admin user: ${err.message}`)
       }
